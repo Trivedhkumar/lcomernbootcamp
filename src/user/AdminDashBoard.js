@@ -1,10 +1,68 @@
 import React from "react";
+import { isAutheticated } from "../auth/helper";
 import Base from "../core/Base";
+import { Link } from "react-router-dom";
 
 const AdminDashBoard = () => {
+  const {
+    user: { name, email, role },
+  } = isAutheticated();
+  const adminLeftSide = () => {
+    return (
+      <div className="card">
+        <h4 className="card-header bg-dark text-white">Admin DashBoard</h4>
+        <ul className="list-group">
+          <li className="list-group-item">
+            <Link to="admin/create" className="nav-link text-success">
+              Create Categories
+            </Link>
+          </li>
+          <li className="list-group-item">
+            <Link to="admin/create" className="nav-link text-success">
+              Create Product
+            </Link>
+          </li>
+          <li className="list-group-item">
+            <Link to="admin/create" className="nav-link text-success">
+              Manage Products
+            </Link>
+          </li>
+          <li className="list-group-item">
+            <Link to="admin/create" className="nav-link text-success">
+              Manage Orders
+            </Link>
+          </li>
+        </ul>
+      </div>
+    );
+  };
+  const adminRightSide = () => {
+    return (
+      <div className="card mb-4">
+        <h4 className="card-header">Admin INformation</h4>
+        <ul className="list-group">
+          <li className="list-group-item">
+            <span className="badge badge-success mr-2">Name:</span>
+            {name}
+          </li>
+          <li className="list-group-item">
+            <span className="badge badge-success mr-2">Email:</span>
+            {email}
+          </li>
+        </ul>
+      </div>
+    );
+  };
   return (
-    <Base title="AdminDashBoard page">
-      <h1>This is AdminDashBoard page</h1>
+    <Base
+      className="container bg-success py-4"
+      title="Welcome to Admin Dashboard"
+      description="Manage all your products here"
+    >
+      <div className="row">
+        <div className="col-3">{adminLeftSide()}</div>
+        <div className="col-9">{adminRightSide()}</div>
+      </div>
     </Base>
   );
 };
