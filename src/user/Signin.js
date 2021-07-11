@@ -6,7 +6,7 @@ import { signin, authenticate, isAutheticated } from "../auth/helper";
 
 const Signin = () => {
   const [values, setValues] = useState({
-    email: "c@gmail.com",
+    email: "trivedhj0@gmail.com",
     password: "1234567",
     error: "",
     loading: false,
