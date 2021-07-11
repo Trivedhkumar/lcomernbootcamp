@@ -6,82 +6,76 @@ import {
   getProduct,
   updateProduct,
 } from "./helper/adminapicall";
-import { isAutheticated } from "../auth/helper";
+import { isAutheticated } from "../auth/helper/index";
 
-export default function UpdateProduct({ match }) {
+const UpdateProduct = ({ match }) => {
+  const { user, token } = isAutheticated();
   const [values, setValues] = useState({
     name: "",
     price: "",
     stock: "",
     description: "",
     category: "",
-    categories: "",
-    loading: "",
+    categories: [],
+    photo: "",
+    loading: false,
     error: "",
     createdProduct: "",
-    getRedirect: "",
+    getaRedirect: false,
     formData: "",
   });
+
   const {
     name,
+    description,
     price,
     stock,
-    description,
-    category,
     categories,
+    category,
     loading,
     error,
     createdProduct,
-    getRedirect,
+    getaRedirect,
     formData,
   } = values;
-  const { user, token } = isAutheticated();
-  const preload = (productId) => {
-    getProduct(productId)
-      .then((data) => {
-        if (data.error) {
-          setValues({ ...values, error: data.error });
-        } else {
-          // preloadCategories();
 
-          setValues({
-            ...values,
-            name: data.name,
-            description: data.description,
-            price: data.price,
-            category: data.category._id,
-            stock: data.stock,
-            formData: new FormData(),
-          });
-        }
-      })
-      .catch((err) => console.log(err));
+  const preload = (productId) => {
+    getProduct(productId).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        preloadCategories();
+        setValues({
+          ...values,
+          name: data.name,
+          description: data.description,
+          price: data.price,
+          category: data.category._id,
+          stock: data.stock,
+          formData: new FormData(),
+        });
+      }
+    });
   };
+
   const preloadCategories = () => {
-    getAllCategories()
-      .then((data) => {
-        if (data.error) {
-          setValues({ ...values, error: data.error });
-        } else {
-          setValues({
-            ...values,
-            categories: data,
-            formData: new FormData(),
-          });
-        }
-      })
-      .catch((err) => console.log(err));
+    getAllCategories().then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setValues({
+          categories: data,
+          formData: new FormData(),
+        });
+      }
+    });
   };
 
   useEffect(() => {
     preload(match.params.productId);
   }, []);
-  const handleChange = (name) => (event) => {
-    console.log(event);
-    const value = name === "photo" ? event.target.files[0] : event.target.value;
-    formData.set(name, value);
-    setValues({ ...values, [name]: value });
-  };
+
+  //TODO: work on it
   const onSubmit = (event) => {
     event.preventDefault();
     setValues({ ...values, error: "", loading: true });
@@ -104,13 +98,21 @@ export default function UpdateProduct({ match }) {
       }
     );
   };
+
+  const handleChange = (name) => (event) => {
+    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    formData.set(name, value);
+    setValues({ ...values, [name]: value });
+  };
+
   const successMessage = () => (
     <div
       className={`alert alert-success mt-3 ${createdProduct ? "" : "d-none"}`}
     >
-      <h4>{createdProduct} updated successfully</h4>{" "}
+      <h4>{createdProduct} updated successfully</h4>
     </div>
   );
+
   const updateProductForm = () => (
     <form>
       <span>Post photo</span>
@@ -160,9 +162,9 @@ export default function UpdateProduct({ match }) {
         >
           <option>Select</option>
           {categories &&
-            categories.map((category, index) => (
-              <option key={index} value={category._id}>
-                {category.name}
+            categories.map((cate, index) => (
+              <option key={index} value={cate._id}>
+                {cate.name}
               </option>
             ))}
         </select>
@@ -172,7 +174,7 @@ export default function UpdateProduct({ match }) {
           onChange={handleChange("stock")}
           type="number"
           className="form-control"
-          placeholder="Quantity"
+          placeholder="Stock"
           value={stock}
         />
       </div>
@@ -180,23 +182,30 @@ export default function UpdateProduct({ match }) {
       <button
         type="submit"
         onClick={onSubmit}
-        className="btn btn-dark btn-outline-success bt-3"
+        className="btn btn-outline-success mb-3"
       >
         Update Product
       </button>
     </form>
   );
+
   return (
     <Base
-      title="Add a product here"
+      title="Add a product here!"
       description="Welcome to product creation section"
       className="container bg-info p-4"
     >
       <Link to="/admin/dashboard" className="btn btn-md btn-dark mb-3">
         Admin Home
       </Link>
-      {successMessage()}
-      {updateProductForm()}
+      <div className="row bg-dark text-white rounded">
+        <div className="col-md-8 offset-md-2">
+          {successMessage()}
+          {updateProductForm()}
+        </div>
+      </div>
     </Base>
   );
-}
+};
+
+export default UpdateProduct;
