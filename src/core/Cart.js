@@ -3,6 +3,7 @@ import "../styles.css";
 import Base from "./Base";
 import Card from "./Card";
 import { loadCart } from "./helper/CartHelper";
+import StripeCheckoutComponent from "./StripeCheckoutComponent";
 
 export default function Cart() {
   const [products, setProducts] = useState([]);
@@ -10,7 +11,7 @@ export default function Cart() {
   useEffect(() => {
     setProducts(loadCart());
   }, [reload]);
-  const loadAllProducts = () => {
+  const loadAllProducts = (products) => {
     return (
       <div>
         <h2>This section is to load products</h2>
@@ -39,8 +40,16 @@ export default function Cart() {
   return (
     <Base title="Cart Page" description="Welcome to the Cart ">
       <div className="row text-center">
-        <div className="col-6">{loadAllProducts()}</div>
-        <div className="col-6">{loadCheckout()}</div>
+        <div className="col-6">
+          {products.length > 0 ? (
+            loadAllProducts()
+          ) : (
+            <h3>No products in cart </h3>
+          )}
+        </div>
+        <div className="col-6">
+          <StripeCheckoutComponent products={products} setReload={setReload} />
+        </div>
       </div>
     </Base>
   );
