@@ -1,18 +1,20 @@
 import React from "react";
 import { API } from "../../backend";
 
-export default function ImageHelper({ product }) {
-  let imageUrl = product
+const ImageHelper = ({ product }) => {
+  const imageurl = product
     ? `${API}/product/photo/${product._id}`
-    : "https://source.unsplash.com/random/800x600";
+    : `https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940`;
   return (
     <div className="rounded border border-success p-2">
       <img
-        src={imageUrl}
-        alt="pic of product"
+        src={imageurl}
+        alt="photo"
         style={{ maxHeight: "100%", maxWidth: "100%" }}
         className="mb-3 rounded"
       />
     </div>
   );
-}
+};
+
+export default ImageHelper;

@@ -1,16 +1,17 @@
 import React from "react";
-import { isAutheticated } from "../auth/helper";
 import Base from "../core/Base";
+import { isAutheticated } from "../auth/helper/index";
 import { Link } from "react-router-dom";
 
 const AdminDashBoard = () => {
   const {
-    user: { name, email, role },
+    user: { name, email, role }
   } = isAutheticated();
+
   const adminLeftSide = () => {
     return (
       <div className="card">
-        <h4 className="card-header bg-dark text-white">Admin DashBoard</h4>
+        <h4 className="card-header bg-dark text-white">Admin Navigation</h4>
         <ul className="list-group">
           <li className="list-group-item">
             <Link to="/admin/create/category" className="nav-link text-success">
@@ -33,7 +34,7 @@ const AdminDashBoard = () => {
             </Link>
           </li>
           <li className="list-group-item">
-            <Link to="admin/create" className="nav-link text-success">
+            <Link to="/admin/orders" className="nav-link text-success">
               Manage Orders
             </Link>
           </li>
@@ -41,18 +42,21 @@ const AdminDashBoard = () => {
       </div>
     );
   };
+
   const adminRightSide = () => {
     return (
       <div className="card mb-4">
-        <h4 className="card-header">Admin INformation</h4>
+        <h4 className="card-header">Admin Information</h4>
         <ul className="list-group">
           <li className="list-group-item">
-            <span className="badge badge-success mr-2">Name:</span>
-            {name}
+            <span className="badge badge-success mr-2">Name:</span> {name}
           </li>
           <li className="list-group-item">
-            <span className="badge badge-success mr-2">Email:</span>
-            {email}
+            <span className="badge badge-success mr-2">Email:</span> {email}
+          </li>
+
+          <li className="list-group-item">
+            <span className="badge badge-danger">Admin Area</span>
           </li>
         </ul>
       </div>
@@ -60,9 +64,9 @@ const AdminDashBoard = () => {
   };
   return (
     <Base
-      className="container bg-success py-4"
-      title="Welcome to Admin Dashboard"
-      description="Manage all your products here"
+      title="Welcome to admin area"
+      description="Manage all of your products here"
+      className="container bg-success p-4"
     >
       <div className="row">
         <div className="col-3">{adminLeftSide()}</div>
@@ -71,4 +75,5 @@ const AdminDashBoard = () => {
     </Base>
   );
 };
+
 export default AdminDashBoard;

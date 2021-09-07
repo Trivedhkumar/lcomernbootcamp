@@ -6,32 +6,32 @@ import { signin, authenticate, isAutheticated } from "../auth/helper";
 
 const Signin = () => {
   const [values, setValues] = useState({
-    email: "trivedhj0@gmail.com",
-    password: "1234567",
+    email: "trivedhj@gmail.com",
+    password: "123456",
     error: "",
     loading: false,
-    didRedirect: false,
+    didRedirect: false
   });
 
   const { email, password, error, loading, didRedirect } = values;
   const { user } = isAutheticated();
 
-  const handleChange = (name) => (event) => {
+  const handleChange = name => event => {
     setValues({ ...values, error: false, [name]: event.target.value });
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = event => {
     event.preventDefault();
     setValues({ ...values, error: false, loading: true });
     signin({ email, password })
-      .then((data) => {
+      .then(data => {
         if (data.error) {
           setValues({ ...values, error: data.error, loading: false });
         } else {
           authenticate(data, () => {
             setValues({
               ...values,
-              didRedirect: true,
+              didRedirect: true
             });
           });
         }
@@ -116,6 +116,7 @@ const Signin = () => {
       {errorMessage()}
       {signInForm()}
       {performRedirect()}
+
       <p className="text-white text-center">{JSON.stringify(values)}</p>
     </Base>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { isAutheticated } from "../auth/helper";
 import Base from "../core/Base";
+import { isAutheticated } from "../auth/helper";
+import { Link } from "react-router-dom";
 import { createCategory } from "./helper/adminapicall";
 
 const AddCategory = () => {
@@ -11,40 +11,48 @@ const AddCategory = () => {
 
   const { user, token } = isAutheticated();
 
-  const handleChange = (event) => {
+  const goBack = () => (
+    <div className="mt-5">
+      <Link className="btn btn-sm btn-success mb-3" to="/admin/dashboard">
+        Admin Home
+      </Link>
+    </div>
+  );
+
+  const handleChange = event => {
     setError("");
     setName(event.target.value);
   };
-  const onSubmit = (event) => {
+
+  const onSubmit = event => {
     event.preventDefault();
     setError("");
     setSuccess(false);
 
-    //BE Request
-    createCategory(user._id, token, { name })
-      .then((data) => {
-        if (data.error) {
-          setError(true);
-        } else {
-          setError("");
-          setSuccess(true);
-          setName("");
-        }
-      })
-      .catch((err) => console.log(err));
+    //backend request fired
+    createCategory(user._id, token, { name }).then(data => {
+      if (data.error) {
+        setError(true);
+      } else {
+        setError("");
+        setSuccess(true);
+        setName("");
+      }
+    });
   };
+
   const successMessage = () => {
-    //
     if (success) {
-      return <h4 className="text-success">Category Created Successfully</h4>;
+      return <h4 className="text-success">Category created successfully</h4>;
     }
   };
+
   const warningMessage = () => {
-    //
     if (error) {
-      return <h4 className="text-danger">Failed to Create Category</h4>;
+      return <h4 className="text-success">Failed to create category</h4>;
     }
   };
+
   const myCategoryForm = () => (
     <form>
       <div className="form-group">
@@ -52,10 +60,9 @@ const AddCategory = () => {
         <input
           type="text"
           className="form-control my-3"
-          autoFocus
           onChange={handleChange}
           value={name}
-          onClick={() => onSubmit}
+          autoFocus
           required
           placeholder="For Ex. Summer"
         />
@@ -65,18 +72,12 @@ const AddCategory = () => {
       </div>
     </form>
   );
-  const goBack = () => (
-    <div className="mt-5">
-      <Link className="btn btn-sm btn-info mb-3" to="/admin/dashboard">
-        Admin Home
-      </Link>
-    </div>
-  );
+
   return (
     <Base
       title="Create a category here"
       description="Add a new category for new tshirts"
-      className="container"
+      className="container bg-info p-4"
     >
       <div className="row bg-white rounded">
         <div className="col-md-8 offset-md-2">
@@ -89,4 +90,5 @@ const AddCategory = () => {
     </Base>
   );
 };
+
 export default AddCategory;

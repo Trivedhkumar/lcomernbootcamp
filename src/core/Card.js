@@ -4,7 +4,7 @@ import ImageHelper from "./helper/ImageHelper";
 import { addItemToCart, removeItemFromCart } from "./helper/CartHelper";
 const Card = ({
   product,
-  addToCart = true,
+  addtoCart = true,
   removeFromCart = false,
   setReload = (f) => f,
   reload = undefined,
@@ -21,9 +21,12 @@ const Card = ({
   const addItemsToCart = () => {
     addItemToCart(product, () => setRedirect(true));
   };
+  const addToCart = () => {
+    addItemToCart(product, () => setRedirect(true));
+  };
   const showAddToCart = (addToCart) => {
     return (
-      addToCart && (
+      addtoCart && (
         <div className="col-12">
           <button
             onClick={addItemsToCart}
@@ -62,7 +65,7 @@ const Card = ({
         </p>
         <p className="btn btn-success rounded  btn-sm px-4">$ {cardPrice}</p>
         <div className="row">
-          {showAddToCart(addToCart)}
+          {showAddToCart(addtoCart)}
           {showRemoveFromCart(removeFromCart)}
           {getARedirect(redirect)}
         </div>

@@ -10,7 +10,7 @@ export const getMeToken = (userId, token) => {
     },
   })
     .then((response) => {
-      return response.json();
+      return response;
     })
     .catch((err) => console.log(err));
 };
